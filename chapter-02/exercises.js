@@ -82,8 +82,28 @@ LOGS =>
 */
 
 function drawChessboard(x) {
-
-
+  // Initialize chessArray variable with an empty array
+  var chessArray = [];
+  // Declare for loop using i; Start: 0; Stop: x; Increment by 1 each loop
+  for (var i = 0; i < x; i++) {
+    // Initialize string variable with an empty string
+    var string = "";
+    // Declare for loop using j; Start: 0; Stop: x; Increment by 1 each loop
+    for (var j = 0; j < x; j++) {
+      // Check if i + j is even
+      if ((i + j) % 2 === 0) {
+        // Concatenate and reassign string with "#"
+        string += " ";
+      // Else, concatenate and reassign string with " " (space)
+      } else {
+        string += "#";
+      }
+    }
+    // Push string into chessArray
+    chessArray.push(string);
+  }
+  // Return the joining of chessArray with a line break (\n)
+  return chessArray.join("\n");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
