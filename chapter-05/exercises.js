@@ -2,7 +2,7 @@
 // flatten /////////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////////////////
 
-const { characterScript } = require("./helpers");
+
 
 /**
  * I: The function receives an array of arrays.
@@ -17,7 +17,7 @@ function flatten(array) {
      accumulated so far) with elem (the next element) and an empty array
      for a seed */
   return array.reduce((acc, elem) => acc.concat(elem), []);
-};
+}
 
 // /////////////////////////////////////////////////////////////////////////////
 // loop ////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ function loop(value, test, update, body) {
   body(value);
   // Return the recursive call of loop() with update(value), test, update, & body
   return loop(update(value), test, update, body);
-}; 
+}
 
 // /////////////////////////////////////////////////////////////////////////////
 // every ///////////////////////////////////////////////////////////////////////
@@ -91,7 +91,39 @@ function every(array, test) {
  */
 
 function dominantDirection(text) {
-  
+  // Split text with ('') and map each character to its UNICODE in a new array and assign it textCodeArr
+  let textCodeArr = text.split('').map(x => x.codePointAt(0));
+  // Initialize count object with keys 'ltr', 'rtl', & 'ttb' all assigned with the value of 0
+  let count = { 'ltr': 0, 'rtl': 0, 'ttb': 0 };
+  // Iterate through SCRIPTS array with a for-of loop using script for each object in the array
+  for (let script of SCRIPTS) {
+    // Iterate through each script's ranges array using i
+    for (let i = 0; i < script.ranges.length; i++) {
+      // Iterate through textCodeArr using j
+      for (let j = 0; j < textCodeArr.length; j++) {
+        // Check if textCodeArr[j] is within the range of script.ranges[i]
+        if (textCodeArr[j] >= script.ranges[i][0] && textCodeArr[j] <= script.ranges[i][1])
+          // Update the count object by adding one and reassigning to the key that matches the script's direction
+          count[script.direction] += 1;
+      }
+    }
+  }
+  // Declare dominant variable
+  let dominant;
+  // Initialize dominantCount variable with 0
+  let dominantCount = 0;
+  // Iterate through count object using key for count's keys
+  for (let key in count) {
+    // Check if count[key] is greater than dominantCount
+    if (count[key] > dominantCount) {
+      // Reassign dominantCount to count[key]
+      dominantCount = count[key];
+      // Reassign dominant to key
+      dominant = key;
+    }
+  }
+  // Return dominant
+  return dominant;
 }
 
 // /////////////////////////////////////////////////////////////////////////////
